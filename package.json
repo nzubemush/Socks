@@ -1,0 +1,23 @@
+{
+  "name": "Socks",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nzubemush/Socks.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nzubemush/Socks/issues"
+  },
+  "homepage": "https://github.com/nzubemush/Socks#readme",
+  "dependencies": {
+    "vue": "^2.6.11"
+  }
+}
