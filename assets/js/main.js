@@ -40,7 +40,20 @@ Vue.component ('products', {
                 </div>
 
             </div>
+            
+            <div>
+                <h2>Reviews</h2>
+                <p v-if="!reviews.length">There are no reviews yet.</p>
+                <ul>
+                    <li v-for="review in reviews">
+                        <p>{{ review.name }}</p>
+                        <p>{{ review.rating }}</p>
+                        <p>{{ review.review }}</p>
+                    </li>
+                </ul>
+            </div>
 
+        <product-review @review-submitted="addReview"></product-review>
 
         </div>
     `,
@@ -65,6 +78,7 @@ Vue.component ('products', {
                 }
             ],
             sizes: ["38", "39", "40", "42", "44"],
+            reviews: []
         }
     },
     methods: {
@@ -76,6 +90,9 @@ Vue.component ('products', {
         },
         updateProduct(index) {
             this.selectedVariant = index;
+        },
+        addReview(productReview) {
+            this.reviews.push(productReview)
         }
     },
 
@@ -98,6 +115,73 @@ Vue.component ('products', {
             }
         }
     },
+})
+
+Vue.component('product-review', {
+    template: `
+        <form class="review-form" @submit.prevent="onSubmit">
+        
+            <p v-if="errors.length">
+                <ul>
+                    <li v-for="error in errors">{{ error }}</li>
+                </ul>
+            </p>
+            
+            <p>
+                <label for="name">Name:</label>
+                <input id="name" v-model="name">
+            </p>
+            <p>
+                <label for="review">Review:</label>
+                <textarea id="review" v-model="review"></textarea>
+            </p>
+            <p>
+                <label for="rating">Rating:</label>
+                <select id="rating" v-model.number="rating">
+                    <option>5</option>
+                    <option>4</option>
+                    <option>3</option>
+                    <option>2</option>
+                    <option>1</option>
+                </select>
+            </p>
+            
+            <p>
+                <input type="submit" value="submit">
+            </p>
+        </form>
+    `,
+    data() {
+        return {
+            name: null,
+            review: null,
+            rating: null,
+            question: null,
+            errors: []
+        }
+    },
+    methods: {
+        onSubmit() {
+            if (this.name && this.rating && this.review && this.question) {
+                let productReview = {
+                    name: this.name,
+                    review: this.review,
+                    rating: this.rating
+                };
+                this.$emit('review-submitted', productReview);
+                this.name = null;
+                this.review = null;
+                this.rating = null;
+            }
+            else {
+                if (!this.name) this.errors.push("Name is required");
+                if (!this.review) this.errors.push("Review is required");
+                if (!this.rating) this.errors.push("Rating is required");
+                if (!this.question) this.errors.push("Please respond to question");
+            }
+        }
+    }
+
 })
 
 let app = new Vue({
